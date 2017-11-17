@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: JEFFERSON
- * Date: 09/11/2017
- * Time: 10:40
+ * Date: 08/11/2017
+ * Time: 16:46
  */
 
 require_once "Conexao.php";
@@ -14,16 +14,18 @@ class Produto {
     private $nome;
     private $preco;
     private $categoria;
+    private $estoque;
 
-    public function __construct($codigo, $nome, $preco, $categoria){
-        $this->codigo = $codigo;
-        $this->nome = $nome;
-        $this->preco = $preco;
-        $this->categoria = $categoria;
+    public function __construct($cod, $nom, $pre, $cat, $est ){
+        $this->codigo    = $cod;
+        $this->nome      = $nom;
+        $this->preco     = $pre;
+        $this->categoria = $cat;
+        $this->estoque   = $est;
     }
 
-    public function salvar(){
-        $sql = "NSERT INTO tb_produtos (nome, preco, categoria) VALUES ('$this->nome', $this->preco, '$this->categoria')";
+    public function cadastrar(){
+        $sql = "INSERT INTO tb_produtos (nome, preco, categoria, estoque) VALUES ('$this->nome', $this->preco, '$this->categoria', $this->estoque)";
 
         $conexao = new Conexao();
         $conexao = $conexao->getConexao();
@@ -37,14 +39,18 @@ class Produto {
         $conexao = $conexao->getConexao();
 
         $consulta = $conexao->query($sql);
+
         $listaProdutos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
         return $listaProdutos;
+
     }
+
 }
 
-//nao facam isso em casa
-$tomate = new Produto(null, 'Rabanete', 2.00, 'Tubérculo');
-$lista = $tomate->getProdutos();
+//teste
+$repolho = new Produto(null, "Repolho", 2.50, "Hortaliça", 100);
+$repolho->cadastrar();
 
+$lista = $repolho->getProdutos();
 print_r($lista);
